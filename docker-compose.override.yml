@@ -1,0 +1,17 @@
+# Legend Connect — override для боевого сервера Legend (85.198.82.188, 4 ГБ RAM)
+# Цель: не трогать legend-nginx. web подключаем в сеть legend_default (алиас meet-web),
+# чтобы legend-nginx проксировал по имени. Публичный порт web не открываем (firewall off!).
+services:
+  web:
+    # заменяем публикацию портов: только localhost для локального smoke-теста
+    ports: !override
+      - '127.0.0.1:8000:8000'
+    networks:
+      meet.jitsi:
+      legend_default:
+        aliases:
+          - meet-web
+
+networks:
+  legend_default:
+    external: true
