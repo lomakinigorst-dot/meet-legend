@@ -3,9 +3,9 @@
 # чтобы legend-nginx проксировал по имени. Публичный порт web не открываем (firewall off!).
 services:
   web:
-    # заменяем публикацию портов: только localhost для локального smoke-теста
+    # заменяем публикацию портов: только localhost (образ stable-11031 слушает внутри 80)
     ports: !override
-      - '127.0.0.1:8000:8000'
+      - '127.0.0.1:8000:80'
     networks:
       meet.jitsi:
       legend_default:
