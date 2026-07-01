@@ -72,3 +72,11 @@ docker network ls | grep legend-connect  # своя сеть
 
 ## Обновление версии Jitsi
 Поменять `JITSI_IMAGE_VERSION` в `.env` → `docker compose pull && docker compose up -d`.
+
+## Грабли деплоя (решено 2026-07-01)
+- **Реестр образов:** stable-теги (`stable-11031`) живут на **Docker Hub** (`jitsi/web:...`), НЕ на ghcr.io (там только unstable/дата-теги, манифесты могут 404-ить). Тег-compose использует `jitsi/*` по умолчанию — правильно.
+- **compose ↔ образ:** брать `docker-compose.yml` из ТОГО ЖЕ git-тега, что и образ. master-версия использует `read_only:true`+tmpfs (س6-v3) и роняет prosody на образе stable-11031.
+- **Порты:** образ stable-11031 web слушает контейнерный **80** (не 8000). Проксировать на `meet-web:80`.
+- **legend-nginx:** контейнер; web Jitsi подключён в сеть `legend_default` (alias `meet-web`) — сам legend-nginx не трогаем, только добавляем server-блоки в `/opt/legend/nginx.conf` (бэкап + `nginx -t` перед reload).
+- **TLS:** webroot `/var/www/certbot` (тот же механизм, что op.1leg.ru), certbot на хосте.
+- **Память:** сервер 4ГБ — обязательно `JICOFO_MAX_MEMORY`/`VIDEOBRIDGE_MAX_MEMORY` + swap, иначе OOM.
