@@ -1,0 +1,17 @@
+# Секреты и окружение — НИКОГДА не коммитить
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.crt
+secrets/
+config/*.secret
+
+# Jitsi runtime
+.jitsi-meet-cfg/
+
+# OS / editor
+.DS_Store
+*.log
+node_modules/
