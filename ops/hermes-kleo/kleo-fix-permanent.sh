@@ -18,16 +18,16 @@ trap 'rm -rf "$WORK"' EXIT
 
 [ "$(id -u)" -eq 0 ] || { echo "Нужен root."; exit 1; }
 
-echo "[1/3] Скачиваю..."
+echo "[1/4] Скачиваю..."
 for f in kleo-rollback-deepseek.sh claude-code-openai-proxy.fixed.py; do
   curl -fsSL "$BASE/$f" -o "$WORK/$f" || { echo "ОШИБКА: не скачался $f"; exit 1; }
 done
 
-echo "[2/3] Возвращаю DeepSeek по умолчанию..."
+echo "[2/4] Возвращаю DeepSeek по умолчанию..."
 bash "$WORK/kleo-rollback-deepseek.sh" --defer-gateway-restart
 RC=$?
 
-echo "[3/3] Ставлю исправленный прокси..."
+echo "[3/4] Ставлю исправленный прокси..."
 if python3 -m py_compile "$WORK/claude-code-openai-proxy.fixed.py" 2>/dev/null; then
   TARGET=/opt/kleo/bin/claude-code-openai-proxy.py
   [ -f "$TARGET" ] && cp -a "$TARGET" "$TARGET.bak-$(date +%Y%m%d-%H%M%S)"
@@ -39,6 +39,14 @@ if python3 -m py_compile "$WORK/claude-code-openai-proxy.fixed.py" 2>/dev/null; 
 else
   echo "      ПРОПУЩЕНО: скачанный прокси не прошёл проверку синтаксиса"
 fi
+
+echo "[4/4] Чиню синхронизацию с GitHub (мертва с 20.08)..."
+systemctl enable --now kleo-vault-sync.timer >/dev/null 2>&1 || true
+systemctl start kleo-vault-sync.service >/dev/null 2>&1 || true
+sleep 2
+SYNC="$(systemctl is-active kleo-vault-sync.timer 2>&1)"
+echo "      таймер синхронизации: $SYNC"
+journalctl -u kleo-vault-sync.service -n 5 --no-pager 2>/dev/null | sed 's/^/      /'
 
 echo
 echo "ИТОГ:"
