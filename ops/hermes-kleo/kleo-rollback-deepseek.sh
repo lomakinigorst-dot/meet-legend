@@ -20,11 +20,13 @@ CFG="$HERMES_HOME/config.yaml"
 ENV_FILE="$HERMES_HOME/.env"
 DRY_RUN=0
 STOP_PROXY=0
+DEFER_GW=0
 
 for arg in "$@"; do
   case "$arg" in
     --dry-run) DRY_RUN=1 ;;
     --stop-claude-proxy) STOP_PROXY=1 ;;
+    --defer-gateway-restart) DEFER_GW=1 ;;
     *) echo "Неизвестный аргумент: $arg" >&2; exit 2 ;;
   esac
 done
@@ -160,8 +162,21 @@ if [ "$STOP_PROXY" -eq 1 ]; then
 else
   systemctl restart claude-code-proxy 2>&1 | sed 's/^/   /' || echo "   claude-code-proxy перезапустить не удалось (не критично для DeepSeek)"
 fi
-systemctl restart hermes-gateway
-sleep 6
+if [ "$DEFER_GW" -eq 1 ]; then
+  # Скрипт может выполняться самим агентом внутри hermes-gateway.
+  # Мгновенный restart оборвал бы его ответ на полуслове, поэтому откладываем.
+  if command -v systemd-run >/dev/null 2>&1; then
+    systemd-run --on-active=20 --unit=kleo-gw-restart-$$ \
+      systemctl restart hermes-gateway >/dev/null 2>&1 \
+      && echo "   hermes-gateway перезапустится через 20 секунд"
+  else
+    setsid bash -c 'sleep 20; systemctl restart hermes-gateway' >/dev/null 2>&1 &
+    echo "   hermes-gateway перезапустится через 20 секунд"
+  fi
+else
+  systemctl restart hermes-gateway
+  sleep 6
+fi
 
 echo
 echo "== 5. Проверка =="
