@@ -28,3 +28,12 @@ config.toolbarButtons = [
   "select-background", "settings", "shareaudio", "noisesuppression", "sharedvideo", "shortcuts", "stats",
   "tileview", "toggle-camera", "videoquality", "whiteboard"
 ];
+
+// Звонок вдвоём идёт напрямую между участниками (p2p), и у него СВОЙ порядок кодеков — в шаблоне
+// там тоже AV1 первым. Из-за этого демонстрация экрана в разговоре один на один кодировалась в AV1,
+// и собеседник с устройством без его поддержки видел камеру, но не видел показ экрана.
+// Держим тот же порядок, что и для групповых встреч.
+config.p2p = Object.assign({}, config.p2p, {
+  codecPreferenceOrder: ['VP9', 'VP8', 'H264', 'AV1'],
+  mobileCodecPreferenceOrder: ['VP8', 'VP9', 'H264', 'AV1'],
+});
