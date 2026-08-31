@@ -12,7 +12,7 @@ config.lobby = Object.assign({}, config.lobby, { autoKnock: true });
 
 // Кодек: VP9 первым. AV1 кодируется программно и на ноутбуках сажает батарею и качество картинки.
 config.videoQuality = Object.assign({}, config.videoQuality, {
-  codecPreferenceOrder: ['VP9', 'VP8', 'H264', 'AV1'],
+  codecPreferenceOrder: ['H264', 'VP9', 'VP8', 'AV1'],
   maxFullResolutionParticipants: 4,
 });
 
@@ -34,6 +34,11 @@ config.toolbarButtons = [
 // и собеседник с устройством без его поддержки видел камеру, но не видел показ экрана.
 // Держим тот же порядок, что и для групповых встреч.
 config.p2p = Object.assign({}, config.p2p, {
-  codecPreferenceOrder: ['VP9', 'VP8', 'H264', 'AV1'],
-  mobileCodecPreferenceOrder: ['VP8', 'VP9', 'H264', 'AV1'],
+  codecPreferenceOrder: ['H264', 'VP9', 'VP8', 'AV1'],
+  mobileCodecPreferenceOrder: ['H264', 'VP8', 'VP9', 'AV1'],
 });
+
+// Почему H264 первым: у Apple аппаратно кодируется ТОЛЬКО H264/HEVC. VP8, VP9 и AV1 на маке жмутся
+// процессором — отсюда сажающаяся за минуты батарея и падение картинки до 180p, когда процессор не
+// вытягивает. H264 отдаёт кодирование видеочипу: ноутбук перестаёт греться, а качество держится.
+// AV1 оставлен последним — если у кого-то появится железо с его аппаратной поддержкой, он его получит.
