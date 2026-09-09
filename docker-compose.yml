@@ -11,6 +11,7 @@ services:
             - ${CONFIG}/web/crontabs:/var/spool/cron/crontabs:Z
             - ${CONFIG}/transcripts:/usr/share/jitsi-meet/transcripts:Z
             - ${CONFIG}/web/load-test:/usr/share/jitsi-meet/load-test:Z
+            - ${CONFIG}/web/lang/main-ru.json:/usr/share/jitsi-meet/lang/main-ru.json:Z
         labels:
             service: "jitsi-web"
         environment:
@@ -511,6 +512,81 @@ services:
             - XMPP_INTERNAL_MUC_DOMAIN
             - XMPP_SERVER
             - XMPP_PORT
+        depends_on:
+            - prosody
+        networks:
+            meet.jitsi:
+
+    jvb2:
+        image: jitsi/jvb:${JITSI_IMAGE_VERSION:-stable-11031}
+        restart: ${RESTART_POLICY:-unless-stopped}
+        ports:
+            - '10001:10001/udp'
+            - '127.0.0.1:8081:8080'
+        volumes:
+            - ${CONFIG}/jvb2:/config:Z
+        labels:
+            service: "jitsi-jvb2"
+        environment:
+            - AUTOSCALER_SIDECAR_KEY_FILE
+            - AUTOSCALER_SIDECAR_KEY_ID
+            - AUTOSCALER_SIDECAR_GROUP_NAME
+            - AUTOSCALER_SIDECAR_HOST_ID
+            - AUTOSCALER_SIDECAR_INSTANCE_ID
+            - AUTOSCALER_SIDECAR_PORT
+            - AUTOSCALER_SIDECAR_REGION
+            - AUTOSCALER_SIDECAR_SHUTDOWN_POLLING_INTERVAL
+            - AUTOSCALER_SIDECAR_STATS_POLLING_INTERVAL
+            - DISABLE_AWS_HARVESTER
+            - DOCKER_HOST_ADDRESS
+            - ENABLE_COLIBRI_WEBSOCKET
+            - ENABLE_JVB_XMPP_SERVER
+            - ENABLE_OCTO
+            - ENABLE_SCTP
+            - JVB_ADVERTISE_IPS
+            - JVB_ADVERTISE_PRIVATE_CANDIDATES
+            - JVB_AUTH_USER
+            - JVB_AUTH_PASSWORD
+            - JVB_BREWERY_MUC
+            - JVB_CC_TRUST_BWE
+            - JVB_DISABLE_STUN
+            - JVB_DISABLE_XMPP
+            - JVB_INSTANCE_ID
+            - JVB_PORT
+            - JVB_MUC_NICKNAME
+            - JVB_STUN_SERVERS
+            - JVB_LOG_FILE
+            - JVB_OCTO_BIND_ADDRESS
+            - JVB_OCTO_REGION
+            - JVB_OCTO_RELAY_ID
+            - JVB_REQUIRE_VALID_ADDRESS
+            - JVB_USE_USRSCTP
+            - JVB_WS_DOMAIN
+            - JVB_WS_SERVER_ID
+            - JVB_WS_TLS
+            - JVB_XMPP_AUTH_DOMAIN
+            - JVB_XMPP_INTERNAL_MUC_DOMAIN
+            - JVB_XMPP_PORT
+            - JVB_XMPP_SERVER
+            - PUBLIC_URL
+            - SENTRY_DSN="${JVB_SENTRY_DSN:-0}"
+            - SENTRY_ENVIRONMENT
+            - SENTRY_RELEASE
+            - COLIBRI_REST_ENABLED
+            - SHUTDOWN_REST_ENABLED
+            - TZ
+            - VIDEOBRIDGE_MAX_MEMORY
+            - XMPP_AUTH_DOMAIN
+            - XMPP_INTERNAL_MUC_DOMAIN
+            - XMPP_SERVER
+            - XMPP_PORT
+            # Запасной мост. Один мост — единственная точка отказа: пока он поднимается
+            # после сбоя, не работает ни одна встреча (в логах это «no bridge available»).
+            # Распределяет jicofo: при выключенном Octo одна встреча целиком живёт на одном
+            # мосту, поэтому второй берёт новые встречи, а не делит текущие.
+            - JVB_PORT=10001
+            - JVB_MUC_NICKNAME=jvb2
+            - JVB_WS_SERVER_ID=jvb2
         depends_on:
             - prosody
         networks:

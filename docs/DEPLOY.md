@@ -73,6 +73,12 @@ docker network ls | grep legend-connect  # своя сеть
 ## Обновление версии Jitsi
 Поменять `JITSI_IMAGE_VERSION` в `.env` → `docker compose pull && docker compose up -d`.
 
+⚠️ **Сразу после обновления образа web — прогнать `/opt/legend-connect/connect-lang-overrides.sh`.**
+Русские надписи в зале у Jitsi машинные («Отпинить», «Скрыть собственное представление»); наши
+формулировки лежат в `branding/lang-ru-overrides.json` и накладываются этим скриптом поверх
+словаря из нового образа. Без прогона в зале вернётся машинный перевод. Скрипт сам сообщит,
+если какая-то надпись исчезла из словаря новой версии.
+
 ## Грабли деплоя (решено 2026-07-01)
 - **Реестр образов:** stable-теги (`stable-11031`) живут на **Docker Hub** (`jitsi/web:...`), НЕ на ghcr.io (там только unstable/дата-теги, манифесты могут 404-ить). Тег-compose использует `jitsi/*` по умолчанию — правильно.
 - **compose ↔ образ:** брать `docker-compose.yml` из ТОГО ЖЕ git-тега, что и образ. master-версия использует `read_only:true`+tmpfs (س6-v3) и роняет prosody на образе stable-11031.

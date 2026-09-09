@@ -1,0 +1,121 @@
+{
+  "_комментарий": "Наши формулировки надписей в зале встречи. Накладываются поверх словаря из образа Jitsi скриптом system/connect-lang-overrides.sh. Правим только то, что либо неверно по смыслу, либо звучит нечеловечески. Спорные, но понятные формулировки не трогаем.",
+
+  "videothumbnail": {
+    "hideSelfView": "Скрыть моё видео",
+    "showSelfView": "Показать моё видео",
+    "flip": "Зеркально",
+    "pinToStage": "Закрепить",
+    "unpinFromStage": "Открепить",
+    "mute": "Микрофон выключен",
+    "kick": "Удалить со встречи",
+    "remoteControl": "Начать / остановить удалённое управление"
+  },
+
+  "settings": {
+    "selfView": "Моё видео",
+    "startVideoMuted": "Все входят с выключенной камерой",
+    "startReactionsMuted": "Отключить звуки реакций для всех"
+  },
+
+  "toolbar": {
+    "hangup": "Выйти из встречи",
+    "enterFullScreen": "На весь экран",
+    "exitFullScreen": "Выйти из полноэкранного режима",
+    "startScreenSharing": "Начать демонстрацию экрана",
+    "stopScreenSharing": "Остановить демонстрацию экрана",
+    "reactionBoo": "Отправить реакцию «бу»",
+    "accessibilityLabel": {
+      "selfView": "Моё видео",
+      "collapse": "Свернуть",
+      "expand": "Развернуть"
+    }
+  },
+
+  "notify": {
+    "selfViewTitle": "Вернуть своё видео можно в настройках",
+    "hostAskedUnmute": "Ведущий просит вас включить микрофон",
+    "raisedHands": "{{participantName}} и ещё {{raisedHands}} чел.",
+    "mutedRemotelyTitle": "{{participantDisplayName}} отключил вам микрофон",
+    "suboptimalBrowserWarning": "Похоже, ваш браузер не полностью поддерживает данную систему веб-конференций. Мы работаем над этим, но пока попробуйте другой браузер."
+  },
+
+  "dialog": {
+    "cameraTimeoutError": "Не удалось включить камеру: истекло время ожидания.",
+    "muteEveryoneElsesVideoTitle": "Остановить видео для всех, кроме {{whom}}?",
+    "addMeetingNote": "Добавить заметку о встрече"
+  },
+
+  "videoStatus": {
+    "bestPerformance": "Максимальное качество",
+    "callQuality": "Качество связи"
+  },
+
+  "participantsPane": {
+    "actions": {
+      "askUnmute": "Попросить включить микрофон",
+      "audioModeration": "Включать микрофон самостоятельно"
+    },
+    "headings": {
+      "visitorRequests": " (заявок: {{count}})"
+    }
+  },
+
+  "lonelyMeetingExperience": {
+    "youAreAlone": "Вы пока одни на встрече"
+  },
+
+  "chat": {
+    "enter": "Войти в комнату"
+  },
+
+  "recording": {
+    "highlightMomentDisabled": "Отмечать важные моменты можно будет после начала записи",
+    "serviceDescriptionCloudInfo": "Сохранённые записи автоматически удаляются через 24 часа после начала записи."
+  },
+
+  "transcribing": {
+    "failedToStart": "Не удалось начать расшифровку"
+  },
+
+  "lobby": {
+    "joinRejectedTitle": "Заявка на присоединение отклонена."
+  },
+
+  "prejoin": {
+    "viewAllNumbers": "посмотреть все номера"
+  },
+
+  "incomingCall": {
+    "answer": "Ответить"
+  },
+
+  "keyboardShortcuts": {
+    "toggleFilmstrip": "Показать/скрыть ленту участников",
+    "toggleShortcuts": "Показать/скрыть горячие клавиши"
+  },
+
+  "speakerStats": {
+    "sad": "Грустный",
+    "fearful": "Испуганный"
+  },
+
+  "deepLinking": {
+    "ifDoNotHaveApp": "Если у вас ещё нет приложения:",
+    "ifHaveApp": "Если у вас уже есть приложение:"
+  },
+
+  "info": {
+    "inviteURLFirstPartPersonal": "{{name}} приглашает вас присоединиться к встрече."
+  },
+
+  "record": {
+    "type": {
+      "contact": "Контакт",
+      "lead": "Лид"
+    },
+    "already": {
+      "linked": "Ссылка на встречу уже отправлена объекту Salesforce."
+    }
+  }
+}
